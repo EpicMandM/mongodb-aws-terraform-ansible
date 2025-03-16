@@ -1,7 +1,5 @@
 # NEBO Project
 
-This project automates the deployment and configuration of a MongoDB database using Terraform for infrastructure provisioning and Ansible for configuration management.
-
 ## Prerequisites
 
 - Terraform >= 1.9.0
