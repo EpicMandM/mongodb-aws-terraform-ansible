@@ -1,0 +1,16 @@
+---
+# Configuration for ansible-lint
+
+# Exclude vault files from linting
+exclude_paths:
+  - .ansible/roles/db/vars/vault.yml
+
+# Skip specific rules
+skip_list:
+  - yaml[line-length]  # Don't check line length for encrypted vault files
+  - no-changed-when    # Allow tasks that don't use 'changed_when'
+
+# Warn (but don't error) for deprecated features
+warn_list:
+  - deprecated-command-syntax
+  - experimental

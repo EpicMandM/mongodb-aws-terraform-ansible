@@ -1,0 +1,43 @@
+---
+- name: Create symlink for localtime
+  ansible.builtin.file:
+    src: /usr/share/zoneinfo/Europe/Kyiv
+    dest: /etc/localtime
+    state: link
+    force: true
+
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - curl
+    - gnupg
+    - wget
+    - python3-pip
+
+- name: Add the MongoDB GPG key
+  ansible.builtin.apt_key:
+    url: "{{ mongo_gpg_key_url }}"
+    state: present
+
+- name: Add the MongoDB repository
+  ansible.builtin.apt_repository:
+    repo: "{{ mongo_repo }}"
+    state: present
+
+- name: Install MongoDB
+  ansible.builtin.package:
+    name: mongodb-org
+    state: present
+
+- name: Install pymongo
+  ansible.builtin.pip:
+    name: pymongo
+    state: present
+
+- name: Start MongoDB
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: true

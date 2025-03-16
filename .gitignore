@@ -1,0 +1,50 @@
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform.lock.hcl
+crash.log
+
+# Ansible files
+*.retry
+.vault_pass
+vault_password_file
+.lock
+
+# SSH keys
+*.pem
+id_*
+*.key
+*.pub
+.ssh/
+
+# Secrets
+*vault*.yml
+!*vault*.example.yml
+get_vault_pass.sh
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+logs/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+.directory
+Desktop.ini
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath

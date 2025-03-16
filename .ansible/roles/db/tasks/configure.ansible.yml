@@ -1,0 +1,50 @@
+---
+- name: Move configuration template
+  ansible.builtin.copy:
+    src: mongod.conf
+    dest: /etc/mongod.conf
+    mode: '0644'
+
+- name: Create a user for admin database
+  community.mongodb.mongodb_user:
+    name: "{{ mongo_admin_user }}"
+    password: "{{ mongo_admin_password }}"
+    database: admin
+    state: present
+    roles:
+      - userAdminAnyDatabase
+      - dbAdminAnyDatabase
+      - clusterAdmin
+    login_host: localhost
+    login_port: 27017
+
+- name: Create a user for nebo-task database
+  community.mongodb.mongodb_user:
+    name: "{{ mongo_nebo_user }}"
+    password: "{{ mongo_nebo_password }}"
+    database: nebo-task
+    state: present
+    roles: ["readWrite"]
+    login_host: localhost
+    login_port: 27017
+
+- name: Check if collection exists
+  community.mongodb.mongodb_shell:
+    login_user: "{{ mongo_nebo_user }}"
+    login_password: "{{ mongo_nebo_password }}"
+    login_database: nebo-task
+    eval: "db.getCollectionInfos({name:'tasks'}).length"
+  register: collection_check
+
+- name: Create collection if it doesn't exist
+  community.mongodb.mongodb_shell:
+    login_user: "{{ mongo_nebo_user }}"
+    login_password: "{{ mongo_nebo_password }}"
+    login_database: nebo-task
+    eval: "db.createCollection('tasks')"
+  when: collection_check.transformed_output[0] | int == 0
+
+- name: Restart MongoDB
+  ansible.builtin.service:
+    name: mongod
+    state: restarted

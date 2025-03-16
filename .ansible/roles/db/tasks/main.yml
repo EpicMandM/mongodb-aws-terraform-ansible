@@ -1,0 +1,5 @@
+---
+- name: Include tasks from provision.ansible.yml
+  ansible.builtin.include_tasks: provision.ansible.yml
+- name: Include tasks from configure.ansible.yml
+  ansible.builtin.include_tasks: configure.ansible.yml
